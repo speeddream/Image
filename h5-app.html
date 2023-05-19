@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+	<meta charset="utf-8">
+	<title>APP与H5交互demo</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+	<script src="//zxxkstatic.zxxk.com/xkwjs/lib/jquery-1.10.2.js?v=0.2"></script>
+	<script src="//zxxkstatic.zxxk.com/activity/common/js/bridge.js?v=0.2"></script>
+	<script src="//zxxkstatic.zxxk.com/activity/common/js/mobileUtils.js?v=0.2"></script>
+	<script src="//res.wx.qq.com/open/js/jweixin-1.6.0.js?v=0.2"></script>
+</body>
+
+<body>
+	<h4>URL Intercept</h4>
+	<a href="https://yx.xkw.com/app/wxdaa24109868ed3fb/oauth?code=031SgvGa12FNLD0lytFa1lbpZf0SgvGS&state=wechat_auth_request">通过拦截URL获取参数</a>
+	<br>
+	<a href="https://yx.xkw.com/app/wxdaa24109868ed3fb/login">通过拦截URL调用方法</a>
+	<br>
+	<a href="https://m.zxxk.com/app?targetType=1&params={'courseId': '13213123'}>学科网通用链接</a>
+	<br>
+
+	<h4>Alert</h4>
+    <button onclick="alert('这是一个警告弹框')">Alert</button>
+    <button onclick="confirm('这是一个确认弹框')">Confirm</button>
+    <button onclick="prompt('这是一个输入弹框\n请输入年龄', 18)">Prompt</button>
+    <br>
+
+	<h4>JavaScript Bridge</h4>
+	<button onclick="getUserId()">获取用户ID</button>
+	<br>
+	<button onclick="getUserSetting()">获取用户设置</button>
+	<br>
+	<button onclick="MobileUtils.OpenUserSetting()">打开用户设置</button>
+	<br>
+	<button onclick="getAllCookies()">获取本地cookies</button>
+	<br>
+	<button onclick="saveCookies()">设置cookies</button>
+	<br>
+	<button onclick="isApp()">检测APP</button>
+	<br>
+	<button onclick="chooseAddress()">打开APP地址选择</button>
+	<br>
+	<button onclick="openMemberCenter()">打开会员中心</button>
+	<br>
+	<button onclick="getUserInfo()">获取用户信息(检测APP写入cookies有效性)</button>
+	<br>
+	<button onclick="openDocument(65656)">跳转APP资料详情(资料id 65656)</button>
+	<br>
+	<button onclick="openTopic(1848)">跳转APP自定义专题(专题id 1848)</button>
+	<br>
+	<button onclick="openCardCenter()">跳转APP卡券中心(验证未登录下H5跳转需登录页面)</button>
+	<br>
+	<button onclick="openLogin()">跳转APP登录(跳转类型200-新定义)</button>
+	<br>
+	<wx-open-launch-app id="launch-btn1" appid="wx030a1c7255082c6a" extinfo='{"targetType":170,"params":{}}'>
+		<template>
+			<style>
+				.btn {
+					padding: 12px
+				}
+			</style>
+			<button class="btn">微信内打开APP跳转(研修)</button>
+		</template>
+	</wx-open-launch-app>
+	<wx-open-launch-app id="launch-btn2" appid="wx030a1c7255082c6a" extinfo='{"targetType":2,"params":{"softId":65656}}'>
+		<template>
+			<style>
+				.btn {
+					padding: 12px
+				}
+			</style>
+			<button class="btn">微信内打开APP跳转(资料详情页65656)</button>
+		</template>
+	</wx-open-launch-app>
+	<wx-open-launch-app id="launch-btn3" appid="wx030a1c7255082c6a"
+		extinfo='{"targetType":201,"params":{"url":"https://m.zxxk.com/activity/17zhounian/"}}'>
+		<template>
+			<style>
+				.btn {
+					padding: 12px
+				}
+			</style>
+			<button class="btn">微信内打开APP跳转(资料详情页17周年活动)</button>
+		</template>
+	</wx-open-launch-app>
+	<br>
+	<div>
+		<button id="navigateBarOpaqueBtn" onclick="navigateBarOpaque()">设置导航为透明</button>
+		<br>
+		<button id="shareStatusBtn" onclick="changeShareStatus()">更改页面为可分享</button>
+		<br>
+		<button onclick="shareMiniToFriend()">分享给微信好友(小程序资料详情65656)</button>
+		<br>
+		<button onclick="shareToFriendLine()">分享给微信朋友圈(图文资料详情65656)</button>
+		<br>
+		<button onclick="shareLinkToFriend()">分享给微信好友(图文资料详情65656)</button>
+		<br>
+		<button onclick="shareLinkToFriend2()">分享给微信好友(图文资料详情65656-图片地址)</button>
+		<br>
+		<button onclick="shareImgToFriend()">分享给微信好友(图片)</button>
+		<br>
+		<button onclick="shareImgToFriendLine()">分享给微信朋友圈(图片)</button>
+		<br>
+		<button onclick="shareTextToFriend()">分享给微信好友(文字)</button>
+		<br>
+		<button onclick="shareTextToFriendLine()">分享给微信朋友圈(文字)</button>
+		<br>
+		<button onclick="shareByApp()">拉起分享图层(资料详情65656)</button>
+		<br>
+		<button onclick="shareByAppNoMini()">拉起分享图层(17周年活动--无小程序)</button>
+	</div>
+	<div>
+		<button onclick="appBridge.jumpToPage({
+				targetType: 120,
+				params: {
+				}
+			})">教辅频道</button>
+		<button onclick="appBridge.jumpToPage({
+				targetType: 121,
+				params: {
+				}
+			})">教辅列表</button>
+		<button onclick="appBridge.jumpToPage({
+				targetType: 124,
+				params: {
+					id:1
+				}
+			})">教辅书单</button>
+		<button onclick="appBridge.jumpToPage({
+				targetType: 201,
+				params: {
+					url:'https://m.zxxk.com/wxt/apply_trial/'
+				}
+			})">网校通申请</button>
+		<button onclick="appBridge.jumpToPage({
+				targetType: 201,
+				params: {
+					url:'https://m.zxxk.com/parttimeteacher/mobilejob/?jobid=11'
+				}
+			})">创作营</button>
+		<button onclick="appBridge.jumpToPage({
+				targetType: 201,
+				params: {
+					url:'https://m.zxxk.com/activity/2021kxj/'
+				}
+			})">开学季</button>
+		<button onclick="appBridge.jumpToPage({
+				targetType: 111,
+				params: {
+				}
+			})">名校</button>
+		<button onclick="appBridge.jumpToPage({
+				targetType: 13,
+				params: {
+					newsId:798174
+				}
+			})">资讯（合并）</button>
+		<button onclick="appBridge.jumpToPage({
+				targetType: 13,
+				params: {
+					newsId:798175
+				}
+			})">资讯（学科网）</button>
+		<button onclick="appBridge.jumpToPage({
+				targetType: 100,
+				params: {
+				}
+			})">学豆</button>
+
+	</div>
+	<br>
+	<button onclick="openMini()">直接打开小程序(资料详情65656)</button>
+	<button onclick="alert(window.location.href)">当前页面url</button>
+	<button onclick="window.location.href='https://m.zxxk.com/test/h5-app.html'">跳转原页面</button>
+
+	<div id="httpresult" style="min-height: 100px;">操作数据</div>
+</body>
+<style>
+	button {
+		margin: 5px;
+	}
+</style>
+<script>
+	var baseImg = "data:image/png;base64"
+
+	function openMini() {
+		appBridge.openWxMini("/pages/detail/detail?id=65656");
+	}
+
+	function shareTextToFriend() {
+		appBridge.openShare(1, 3, {
+			"text": "https://m.zxxk.com/soft/65656.html#２００４年石家庄地区物理资料光学"
+		})
+	}
+
+	function shareTextToFriendLine() {
+		appBridge.openShare(2, 3, {
+			"text": "https://m.zxxk.com/soft/65656.html#２００４年石家庄地区物理资料光学"
+		})
+	}
+
+	function shareLinkToFriend() {
+		appBridge.openShare(1, 2, {
+			"description": "折射是重要的光学现象,是理解透镜作用的基础.透镜对光的作用和透镜成像的各种情况是本章知识的核心.",
+			"imageBase64": baseImg,
+			"title": "２００４年石家庄地区物理资料光学",
+			"webPageUrl": "https://m.zxxk.com/soft/65656.html"
+		})
+	}
+
+	function shareLinkToFriend2() {
+		appBridge.openShare(1, 2, {
+			"description": "折射是重要的光学现象,是理解透镜作用的基础.透镜对光的作用和透镜成像的各种情况是本章知识的核心.",
+			"thumbImage": "https://img.zxxk.com/ad/2021062310403710.jpg",
+			"title": "２００４年石家庄地区物理资料光学",
+			"webPageUrl": "https://m.zxxk.com/soft/65656.html"
+		})
+	}
+
+	function shareImgToFriend() {
+		appBridge.openShare(1, 4, {
+			"imageBase64": baseImg
+		})
+	}
+
+	function shareImgToFriendLine() {
+		appBridge.openShare(2, 4, {
+			"imageBase64": baseImg
+		})
+	}
+
+	function openMemberCenter() {
+		appBridge.jumpToPage({
+			targetType: 30,
+			params: {
+				chargeType: 2,
+				activityIds: 86
+			}
+		})
+	}
+
+	function getUserSetting() {
+		MobileUtils.GetUserSetting(function (data) {
+			alert("回调成功" + JSON.stringify(data));
+			$("#httpresult").text(JSON.stringify(data));
+		});
+	}
+
+	function getUserId() {
+		MobileUtils.GetUserId(function (data) {
+			alert("回调成功" + JSON.stringify(data));
+			$("#httpresult").text(JSON.stringify(data));
+		});
+	}
+
+	var fullShareData = {
+		"wxMiniShare": {
+			"appId": "gh_9d9fadaac638",
+			"description": "折射是重要的光学现象,是理解透镜作用的基础.透镜对光的作用和透镜成像的各种情况是本章知识的核心.",
+			"miniType": 0,
+			"path": "/pages/detail/detail?id=65656",
+			"imageBase64": baseImg,
+			"title": "２００４年石家庄地区物理资料光学",
+			"webPageUrl": "https://m.zxxk.com/soft/65656.html",
+			"withTicket": true
+		},
+		"webShare": {
+			"description": "折射是重要的光学现象,是理解透镜作用的基础.透镜对光的作用和透镜成像的各种情况是本章知识的核心.",
+			"imageBase64": baseImg,
+			"title": "２００４年石家庄地区物理资料光学",
+			"webPageUrl": "https://m.zxxk.com/soft/65656.html"
+		},
+		"textShare": {
+			"text": "https://m.zxxk.com/soft/65656.html#２００４年石家庄地区物理资料光学"
+		}
+	};
+
+
+	var noMiniShareData = {
+		"webShare": {
+			"description": "17周年活动集心活动.",
+			"imageBase64": baseImg,
+			"title": "17周年活动",
+			"webPageUrl": "https://m.zxxk.com/activity/17anniversary/"
+		},
+		"textShare": {
+			"text": "https://m.zxxk.com/activity/17anniversary/#17周年活动"
+		}
+	};
+
+	function saveCookies() {
+		appBridge.setCookie("tempCookies", new Date(), 3);
+		getAllCookies();
+	}
+
+	function shareByApp() {
+		appBridge.openShareLayer(fullShareData)
+	}
+
+	function shareByAppNoMini() {
+		appBridge.openShareLayer(noMiniShareData);
+	}
+
+	function chooseAddress() {
+		MobileUtils.ChooseUserAddress(function (data) {
+			alert("回调成功" + JSON.stringify(data));
+			$("#httpresult").text(JSON.stringify(data));
+		});
+	}
+
+	function shareMiniToFriend() {
+		appBridge.openShare(1, 1, {
+			"appId": "gh_9d9fadaac638",
+			"description": "折射是重要的光学现象,是理解透镜作用的基础.透镜对光的作用和透镜成像的各种情况是本章知识的核心.",
+			"miniType": 0,
+			"path": "/pages/detail/detail?id=65656",
+			"imageBase64": baseImg,
+			"title": "２００４年石家庄地区物理资料光学",
+			"webPageUrl": "https://m.zxxk.com/soft/65656.html",
+			"withTicket": true
+		})
+	}
+
+
+	function shareToFriendLine() {
+		appBridge.openShare(2, 2, {
+			"description": "折射是重要的光学现象,是理解透镜作用的基础.透镜对光的作用和透镜成像的各种情况是本章知识的核心.",
+			"imageBase64": baseImg,
+			"title": "２００４年石家庄地区物理资料光学",
+			"webPageUrl": "https://m.zxxk.com/soft/65656.html"
+		})
+	}
+
+	var canShare = false;
+
+	function changeShareStatus() {
+		canShare = !canShare;
+		appBridge.setEnableShare(canShare, canShare ? fullShareData : {})
+		if (canShare) {
+			$("#shareStatusBtn").html("更改页面为不可分享")
+		} else {
+			$("#shareStatusBtn").html("更改页面为可分享")
+		}
+	}
+
+	var barOpaque = false;
+
+	function navigateBarOpaque() {
+		barOpaque = !barOpaque;
+		appBridge.setNavigateBarOpaque(barOpaque)
+		if (barOpaque) {
+			$("#shareStatusBtn").html("设置导航为不透明")
+		} else {
+			$("#shareStatusBtn").html("设置导航为透明")
+		}
+	}
+
+	function getAllCookies() {
+		var cookies = document.cookie;
+		$("#httpresult").text(cookies);
+		alert(cookies);
+	}
+
+	function isApp() {
+		var isapp = appBridge.isApp();
+		$("#httpresult").text(isapp);
+		alert(isapp);
+	}
+
+	function getUserInfo() {
+		$.ajax({
+			url: "/api/v1/user/userinfo",
+			data: {
+				containAsset: true
+			},
+			success: function (data) {
+				$("#httpresult").text(JSON.stringify(data))
+				alert(JSON.stringify(data));
+			},
+			error: function (ex) {
+				$("#httpresult").text(JSON.stringify(data))
+				alert(JSON.stringify(ex));
+				console.log(ex);
+			}
+		})
+	}
+
+	function openDocument(softId) {
+		appBridge.jumpToPage({
+			targetType: 2,
+			params: {
+				softId: softId
+			}
+		})
+	}
+
+	function openTopic(tagId) {
+		appBridge.jumpToPage({
+			targetType: 60,
+			params: {
+				tagId: tagId
+			}
+		})
+	}
+
+	function openCardCenter() {
+		appBridge.jumpToPage({
+			targetType: 31,
+			params: {}
+		})
+	}
+
+	function openLogin() {
+		appBridge.jumpToPage({
+			targetType: 200,
+			params: {}
+		})
+	}
+
+
+	$(function () {
+		$.get("https://m.zxxk.com/api/v1/mp/get-share-info?url=" + window.location.href, function (data) {
+			wx.config({
+				debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印
+				appId: data.appId, // 必填，公众号的唯一标识
+				timestamp: data.timestamp, // 必填，生成签名的时间戳
+				nonceStr: data.nonceStr, // 必填，生成签名的随机串
+				signature: data.token, // 必填，签名
+				jsApiList: [
+					'onMenuShareTimeline',
+					'onMenuShareAppMessage'
+				], // 必填，需要使用的JS接口列表
+				openTagList: [
+					"wx-open-launch-app"
+				] // 可选，需要使用的开放标签列表，例如['wx-open-launch-app']
+			});
+		})
+	})
+
+	var btn = document.getElementById('launch-btn1');
+	btn.addEventListener('launch', function (e) {
+		alert('success');
+	});
+	btn.addEventListener('error', function (e) {
+		alert('fail', e.detail);
+	});
+
+	var btn2 = document.getElementById('launch-btn2');
+	btn2.addEventListener('launch', function (e) {
+		alert('success');
+	});
+	btn2.addEventListener('error', function (e) {
+		alert('fail', e.detail);
+	});
+
+	var btn3 = document.getElementById('launch-btn3');
+	btn3.addEventListener('launch', function (e) {
+		alert('success');
+	});
+	btn3.addEventListener('error', function (e) {
+		alert('fail' + JSON.stringify(e));
+	});
+	window.H5ShareSuccess = function (shareTarget, shareType) {
+		alert("分享回来了" + shareTarget + "--" + shareType)
+	}
+</script>
+
+</html>
+
+
